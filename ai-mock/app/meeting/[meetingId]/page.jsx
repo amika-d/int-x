@@ -3,8 +3,13 @@
 import React, { useRef, useEffect, useState } from 'react';
 import io from 'socket.io-client';
 import { useRouter } from 'next/router';
-import '../meeting.css';
-const MeetingPage = () => {
+import '../../meeting.css';
+function MeetingPage ({params}) {
+
+    
+
+
+
     
     const localVideoRef = useRef(null);
     const remoteVideoRef = useRef(null);
