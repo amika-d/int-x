@@ -2,23 +2,37 @@
 import Image from "next/image"
 import { Mic, Info, Video, VideoOff } from "lucide-react"
 import { Button } from "@/components/ui/button"
-import React, { useEffect } from "react"
+import React, { useEffect, useState,useRef, useCallback  } from "react"
 import { db } from "@/utils/db"
 import { MockInterview } from "@/utils/schema"
 import { eq } from "drizzle-orm"
+import Webcam from "react-webcam"
+
 
 export default function Interview({params}) {
-  useEffect(()=>{
-    console.log(params)
-    GetInterviewDetails
-  },[])
+  const [interviewData, setInterviewData] = useState();
+  const [isWebcamOn, setIsWebcamOn] = useState(true)
+  const webcamRef = useRef(null)
+  useEffect(() => {
+    const fetchParams = async () => {
+      const unwrappedParams = await params;
+      console.log(unwrappedParams.interviewId);
+      GetInterviewDetails(unwrappedParams.interviewId);
+    };
+    fetchParams();
+  }, [params]);
 
-  const GetInterviewDetails = async()=>{
-    const result= await db.select().from(MockInterview)
-    .where(eq(MockInterview.mockId,params.interviewId))
-    console.log(result)
-  }
+  const toggleWebcam = useCallback(() => {
+    setIsWebcamOn((prev) => !prev)
+  }, [])
 
+  const GetInterviewDetails = async (interviewId) => {
+    const result = await db
+      .select()
+      .from(MockInterview)
+      .where(eq(MockInterview.mockId, interviewId));
+    setInterviewData(result[0]);
+  };
 
   return (
     <div className="flex flex-col h-screen bg-[#121212] text-white">
@@ -42,7 +56,7 @@ export default function Interview({params}) {
               <div className="w-32 h-32 rounded-full bg-gray-200 flex items-center justify-center overflow-hidden">
                 <Image
                   src="/placeholder.svg?height=128&width=128"
-                  alt="Coder's Gym Channel"
+                  alt="interviewer"
                   width={128}
                   height={128}
                   className="rounded-full"
@@ -56,22 +70,46 @@ export default function Interview({params}) {
           </div>
 
           {/* Participant 2 - user */}
-          <div className="bg-[#1e1e1e] border-2 border-green-600 rounded-lg p-6 flex flex-col items-center">
-            <div className="relative w-32 h-32 mb-6">
-              <div className="w-32 h-32 rounded-full bg-gray-200 flex items-center justify-center overflow-hidden">
-                <Image
-                  src="/placeholder.svg?height=128&width=128"
-                  alt="user"
-                  width={128}
-                  height={128}
-                  className="rounded-full"
+          <div className="bg-[#1e1e1e] border-2 border-green-600 rounded-lg overflow-hidden flex flex-col">
+            {isWebcamOn ? (
+              /* Webcam view - fills the entire container */
+              <div className="relative flex-1 w-full aspect-video">
+                <Webcam
+                  ref={webcamRef}
+                  audio={false}
+                  mirrored={true}
+                  className="absolute inset-0 w-full h-full object-cover"
+                  videoConstraints={{
+                    facingMode: "user",
+                  }}
                 />
+                <div
+                  className="absolute bottom-4 right-4 bg-[#1e1e1e] p-1 rounded-full cursor-pointer z-10"
+                  onClick={toggleWebcam}
+                >
+                  <Video size={20} className="text-green-600" />
+                </div>
+                <div className="absolute bottom-0 left-0 right-0 p-2 bg-gradient-to-t from-black/70 to-transparent">
+                  <p className="text-center text-white">Amma</p>
+                </div>
               </div>
-              <div className="absolute bottom-0 right-0 bg-[#1e1e1e] p-1 rounded-full">
-                <Video size={20} className="text-green-600" />
+            ) : (
+              /* Profile view - shows circular avatar */
+              <div className="p-6 flex flex-col items-center">
+                <div className="relative w-32 h-32 mb-6">
+                  <div className="w-32 h-32 rounded-full bg-gray-200 flex items-center justify-center overflow-hidden">
+                    <Image src="/user.png" alt="Thasara" width={128} height={128} className="rounded-full" />
+                  </div>
+                  <div
+                    className="absolute bottom-0 right-0 bg-[#1e1e1e] p-1 rounded-full cursor-pointer"
+                    onClick={toggleWebcam}
+                  >
+                    <VideoOff size={20} className="text-gray-400" />
+                  </div>
+                </div>
+                <p className="text-center">Amma</p>
               </div>
-            </div>
-            <p className="text-center">Thasara</p>
+            )}
           </div>
         </div>
       </main>
