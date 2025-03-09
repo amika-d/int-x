@@ -98,7 +98,7 @@ export default function Interview({params}) {
               <div className="p-6 flex flex-col items-center">
                 <div className="relative w-32 h-32 mb-6">
                   <div className="w-32 h-32 rounded-full bg-gray-200 flex items-center justify-center overflow-hidden">
-                    <Image src="/user.png" alt="Thasara" width={128} height={128} className="rounded-full" />
+                    <Image src="/batman.jpg" alt="Thasara" width={128} height={128} className="rounded-full" />
                   </div>
                   <div
                     className="absolute bottom-0 right-0 bg-[#1e1e1e] p-1 rounded-full cursor-pointer"
