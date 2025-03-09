@@ -1,18 +1,17 @@
-"use client"
-import Image from "next/image"
-import { Mic, Info, Video, VideoOff } from "lucide-react"
-import { Button } from "@/components/ui/button"
-import React, { useEffect, useState,useRef, useCallback  } from "react"
-import { db } from "@/utils/db"
-import { MockInterview } from "@/utils/schema"
-import { eq } from "drizzle-orm"
-import Webcam from "react-webcam"
+"use client";
+import Image from "next/image";
+import { Mic, Info, Video, VideoOff } from "lucide-react";
+import { Button } from "@/components/ui/button";
+import React, { useEffect, useState, useRef, useCallback } from "react";
+import { db } from "@/utils/db";
+import { MockInterview } from "@/utils/schema";
+import { eq } from "drizzle-orm";
+import Webcam from "react-webcam";
 
-
-export default function Interview({params}) {
+export default function Interview({ params }) {
   const [interviewData, setInterviewData] = useState();
-  const [isWebcamOn, setIsWebcamOn] = useState(true)
-  const webcamRef = useRef(null)
+  const [isWebcamOn, setIsWebcamOn] = useState(true);
+  const webcamRef = useRef(null);
   useEffect(() => {
     const fetchParams = async () => {
       const unwrappedParams = await params;
@@ -23,8 +22,9 @@ export default function Interview({params}) {
   }, [params]);
 
   const toggleWebcam = useCallback(() => {
-    setIsWebcamOn((prev) => !prev)
-  }, [])
+    setIsWebcamOn((prev) => !prev);
+    setIsMirrored((prev) => !prev);
+  }, []);
 
   const GetInterviewDetails = async (interviewId) => {
     const result = await db
@@ -98,7 +98,13 @@ export default function Interview({params}) {
               <div className="p-6 flex flex-col items-center">
                 <div className="relative w-32 h-32 mb-6">
                   <div className="w-32 h-32 rounded-full bg-gray-200 flex items-center justify-center overflow-hidden">
-                    <Image src="/batman.jpg" alt="Thasara" width={128} height={128} className="rounded-full" />
+                    <Image
+                      src="/batman.jpg"
+                      alt="Thasara"
+                      width={128}
+                      height={128}
+                      className="rounded-full"
+                    />
                   </div>
                   <div
                     className="absolute bottom-0 right-0 bg-[#1e1e1e] p-1 rounded-full cursor-pointer"
@@ -129,6 +135,5 @@ export default function Interview({params}) {
         </Button>
       </footer>
     </div>
-  )
+  );
 }
-
