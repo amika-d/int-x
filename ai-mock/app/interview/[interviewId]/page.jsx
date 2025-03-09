@@ -23,7 +23,7 @@ export default function Interview({ params }) {
 
   const toggleWebcam = useCallback(() => {
     setIsWebcamOn((prev) => !prev);
-    setIsMirrored((prev) => !prev);
+    
   }, []);
 
   const GetInterviewDetails = async (interviewId) => {
@@ -70,7 +70,7 @@ export default function Interview({ params }) {
           </div>
 
           {/* Participant 2 - user */}
-          <div className="bg-[#1e1e1e] border-2 border-green-600 rounded-lg overflow-hidden flex flex-col">
+          <div className="bg-[#1e1e1e] border-2 border-amber-600 rounded-lg overflow-hidden flex flex-col">
             {isWebcamOn ? (
               /* Webcam view - fills the entire container */
               <div className="relative flex-1 w-full aspect-video">
@@ -87,7 +87,7 @@ export default function Interview({ params }) {
                   className="absolute bottom-4 right-4 bg-[#1e1e1e] p-1 rounded-full cursor-pointer z-10"
                   onClick={toggleWebcam}
                 >
-                  <Video size={20} className="text-green-600" />
+                  <Video size={20} className="text-amber-600" />
                 </div>
                 <div className="absolute bottom-0 left-0 right-0 p-2 bg-gradient-to-t from-black/70 to-transparent">
                   <p className="text-center text-white">Amma</p>
@@ -126,7 +126,7 @@ export default function Interview({ params }) {
         <Button
           variant="outline"
           size="icon"
-          className="rounded-full bg-green-600 hover:bg-green-700 border-none h-12 w-12"
+          className="rounded-full bg-amber-400 hover:bg-amber-500 border-none h-12 w-12"
         >
           <Mic className="h-6 w-6" />
         </Button>
