@@ -7,18 +7,24 @@ import { db } from "@/utils/db";
 import { MockInterview } from "@/utils/schema";
 import { eq } from "drizzle-orm";
 import Webcam from "react-webcam";
+import { chatSession } from "@/utils/GeminiAiModel";
+import Link from "next/link";
+
 
 export default function Interview({ params }) {
   const [interviewData, setInterviewData] = useState();
   const [isWebcamOn, setIsWebcamOn] = useState(true);
   const [initialResponse, setInitialResponse] = useState("");
+  const [conversationHistory, setConversationHistory] = useState([]);
+  const [userInput, setUserInput] = useState("");
   const webcamRef = useRef(null);
 
   useEffect(() => {
     const fetchParams = async () => {
       const unwrappedParams = await params;
       console.log("Interview ID:", unwrappedParams.interviewId);
-      await GetInterviewDetails(unwrappedParams.interviewId);
+      const interview = await GetInterviewDetails(unwrappedParams.interviewId);
+      await startConversation(interview);
     };
     fetchParams();
   }, [params]);
@@ -31,17 +37,22 @@ export default function Interview({ params }) {
         .where(eq(MockInterview.mockId, interviewId));
       console.log("Fetched Interview Data:", result);
       setInterviewData(result[0]);
-      if (result[0] && result[0].jsonMockResp && result[0].jsonMockResp.length > 0) {
+      if (
+        result[0] &&
+        result[0].jsonMockResp &&
+        result[0].jsonMockResp.length > 0
+      ) {
         setInitialResponse(result[0].jsonMockResp[0].question);
         console.log("Job Role:", result[0].jobRole);
         console.log("Job Description:", result[0].jobDesc);
-        console.log("Initial Response:", result[0].jsonMockResp[0].question);
       }
+      return result[0];
     } catch (error) {
       console.error("Error fetching interview details:", error);
     }
   };
 
+  
   const toggleWebcam = useCallback(() => {
     setIsWebcamOn((prev) => !prev);
   }, []);
@@ -141,17 +152,20 @@ export default function Interview({ params }) {
       {/* Footer */}
       <footer className="flex justify-between items-center p-4 border-t border-gray-800">
         <div className="text-lg font-mono">24:36</div>
-        <Button
+        {/* <Button
           variant="outline"
           size="icon"
           className="rounded-full bg-amber-400 hover:bg-amber-500 border-none h-12 w-12"
         >
           <Mic className="h-6 w-6" />
-        </Button>
+        </Button> */}
+        <Link href ={"/interview/}"+params.interviewId+"/start"}>
+            <Button  className="hover:bg-amber-300 hover:text-blue-950"> Start Interview</Button>
+        </Link>
         <Button variant="ghost" size="icon" className="text-gray-400">
           <Info className="h-6 w-6" />
         </Button>
-      </footer>
+      </footer> 
     </div>
   );
 }
