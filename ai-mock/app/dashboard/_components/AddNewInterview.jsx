@@ -35,58 +35,8 @@ const AddNewInterview = () => {
     setLoading(true);
 
     console.log("Job Role:", jobRole, "Job Desc:", jobDesc);
-    const InputPrompt = `You are a professional interviewer conducting a job interview. 
-    Greet the candidate warmly and begin the conversation. Start by introducing yourself 
-    and maintain a professional yet friendly tone throughout the session. And ask user can we start  the conversation.
-    And ask 1 question on   this topic ${jobDesc} . Only  after the user  input`;
-    let result = await chatSession.sendMessage(InputPrompt);
-
-    console.log("Initail Response: ", result.response.text());
-    let continueConversation = true;
-    let conversationHistory = [];
-    let chatResponse = result.response.text();
-    conversationHistory.push({
-      id: 0,
-      question: chatResponse,
-      answer: "",
-    });
-    // while (continueConversation) {
-    //   let userInput = prompt("Enter your response: ");
-    //   if (userInput === null || userInput.toLowerCase === "exit") {
-    //     console.log("Conversation Ended");
-    //     console.log(
-    //       "Conversation Summary:",
-    //       JSON.stringify(conversationHistory, null, 2)
-    //     );
-    //     console.log(conversationHistory);
-
-    //     continueConversation = false;
-    //     break;
-    //   } else {
-    //     try {
-    //       result = await chatSession.sendMessage(userInput);
-
-    //       chatResponse = result.response
-    //         .text()
-    //         .replace(/\n/g, " ")
-    //         .replace(/\*\*/g, "");
-    //       console.log("Chat Response:", chatResponse);
-
-    //       let jsonResponse = JSON.parse(chatResponse);
-    //       let jsonUserInput = JSON.stringify(userInput);
-    //       conversationEntry = {
-    //         id: conversationHistory.length,
-    //         question: jsonResponse,
-    //         answer: jsonUserInput,
-    //       };
-    //       conversationHistory.push(conversationEntry);
-    //       console.log("Updated Conversation History:", conversationHistory);
-    //       setLoading(false);
-    //     } catch (error) {
-    //       console.error("Error during conversation:", error);
-    //     }
-    //   }
-    // }
+    let conversationHistory  = [];
+   
     setJsonResponse(conversationHistory);
     if (conversationHistory) {
       const resp = await db
