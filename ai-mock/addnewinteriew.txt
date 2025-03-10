@@ -45,48 +45,44 @@ const AddNewInterview = () => {
     let continueConversation = true;
     let conversationHistory = [];
     let chatResponse = result.response.text();
-    conversationHistory.push({
-      id: 0,
-      question: chatResponse,
-      answer: "",
-    });
-    // while (continueConversation) {
-    //   let userInput = prompt("Enter your response: ");
-    //   if (userInput === null || userInput.toLowerCase === "exit") {
-    //     console.log("Conversation Ended");
-    //     console.log(
-    //       "Conversation Summary:",
-    //       JSON.stringify(conversationHistory, null, 2)
-    //     );
-    //     console.log(conversationHistory);
 
-    //     continueConversation = false;
-    //     break;
-    //   } else {
-    //     try {
-    //       result = await chatSession.sendMessage(userInput);
+    while (continueConversation) {
+      let userInput = prompt("Enter your response: ");
+      if (userInput === null || userInput.toLowerCase === "exit") {
+        console.log("Conversation Ended");
+        console.log(
+          "Conversation Summary:",
+          JSON.stringify(conversationHistory, null, 2)
+        );
+        console.log(conversationHistory);
 
-    //       chatResponse = result.response
-    //         .text()
-    //         .replace(/\n/g, " ")
-    //         .replace(/\*\*/g, "");
-    //       console.log("Chat Response:", chatResponse);
+        continueConversation = false;
+        break;
+      } else {
+        try {
+          result = await chatSession.sendMessage(userInput);
 
-    //       let jsonResponse = JSON.parse(chatResponse);
-    //       let jsonUserInput = JSON.stringify(userInput);
-    //       conversationEntry = {
-    //         id: conversationHistory.length,
-    //         question: jsonResponse,
-    //         answer: jsonUserInput,
-    //       };
-    //       conversationHistory.push(conversationEntry);
-    //       console.log("Updated Conversation History:", conversationHistory);
-    //       setLoading(false);
-    //     } catch (error) {
-    //       console.error("Error during conversation:", error);
-    //     }
-    //   }
-    // }
+          chatResponse = result.response
+            .text()
+            .replace(/\n/g, " ")
+            .replace(/\*\*/g, "");
+          console.log("Chat Response:", chatResponse);
+
+          let jsonResponse = JSON.parse(chatResponse);
+          let jsonUserInput = JSON.stringify(userInput);
+          conversationEntry = {
+            id: conversationHistory.length,
+            question: jsonResponse,
+            answer: jsonUserInput,
+          };
+          conversationHistory.push(conversationEntry);
+          console.log("Updated Conversation History:", conversationHistory);
+          setLoading(false);
+        } catch (error) {
+          console.error("Error during conversation:", error);
+        }
+      }
+    }
     setJsonResponse(conversationHistory);
     if (conversationHistory) {
       const resp = await db

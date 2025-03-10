@@ -11,28 +11,40 @@ import Webcam from "react-webcam";
 export default function Interview({ params }) {
   const [interviewData, setInterviewData] = useState();
   const [isWebcamOn, setIsWebcamOn] = useState(true);
+  const [initialResponse, setInitialResponse] = useState("");
   const webcamRef = useRef(null);
+
   useEffect(() => {
     const fetchParams = async () => {
       const unwrappedParams = await params;
-      console.log(unwrappedParams.interviewId);
-      GetInterviewDetails(unwrappedParams.interviewId);
+      console.log("Interview ID:", unwrappedParams.interviewId);
+      await GetInterviewDetails(unwrappedParams.interviewId);
     };
     fetchParams();
   }, [params]);
 
+  const GetInterviewDetails = async (interviewId) => {
+    try {
+      const result = await db
+        .select()
+        .from(MockInterview)
+        .where(eq(MockInterview.mockId, interviewId));
+      console.log("Fetched Interview Data:", result);
+      setInterviewData(result[0]);
+      if (result[0] && result[0].jsonMockResp && result[0].jsonMockResp.length > 0) {
+        setInitialResponse(result[0].jsonMockResp[0].question);
+        console.log("Job Role:", result[0].jobRole);
+        console.log("Job Description:", result[0].jobDesc);
+        console.log("Initial Response:", result[0].jsonMockResp[0].question);
+      }
+    } catch (error) {
+      console.error("Error fetching interview details:", error);
+    }
+  };
+
   const toggleWebcam = useCallback(() => {
     setIsWebcamOn((prev) => !prev);
-    
   }, []);
-
-  const GetInterviewDetails = async (interviewId) => {
-    const result = await db
-      .select()
-      .from(MockInterview)
-      .where(eq(MockInterview.mockId, interviewId));
-    setInterviewData(result[0]);
-  };
 
   return (
     <div className="flex flex-col h-screen bg-[#121212] text-white">
@@ -118,6 +130,12 @@ export default function Interview({ params }) {
             )}
           </div>
         </div>
+        {/* Display initial response */}
+        {initialResponse && (
+          <div className="mt-6 p-4 bg-gray-800 rounded-lg text-white">
+            <p>{initialResponse}</p>
+          </div>
+        )}
       </main>
 
       {/* Footer */}
