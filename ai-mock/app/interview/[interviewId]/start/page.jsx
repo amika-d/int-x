@@ -111,7 +111,7 @@ function StartInterview({ params }) {
                   <Video size={20} className="text-amber-600" />
                 </div>
                 <div className="absolute bottom-0 left-0 right-0 p-2 bg-gradient-to-t from-black/70 to-transparent">
-                  <p className="text-center text-white">Amma</p>
+                  <p className="text-center text-white">Amika</p>
                 </div>
               </div>
             ) : (
@@ -150,6 +150,7 @@ function StartInterview({ params }) {
       {/* Footer */}
       <footer className="flex justify-between items-center p-4 border-t border-gray-800">
         <div className="text-lg font-mono"></div>
+        <div>
         <Button
           variant="outline"
           size="icon"
@@ -157,6 +158,9 @@ function StartInterview({ params }) {
         >
           <Mic className="h-6 w-6" />
         </Button>
+        
+        </div>
+      
 
         <Button variant="ghost" size="icon" className="text-gray-400">
           <Info className="h-6 w-6" />
