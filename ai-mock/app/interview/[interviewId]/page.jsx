@@ -11,6 +11,7 @@ import { chatSession } from "@/utils/GeminiAiModel";
 import Link from "next/link";
 
 
+
 export default function Interview({ params }) {
   const [interviewData, setInterviewData] = useState();
   const [isWebcamOn, setIsWebcamOn] = useState(true);
@@ -19,7 +20,7 @@ export default function Interview({ params }) {
   const [userInput, setUserInput] = useState("");
   const webcamRef = useRef(null);
 
-  useEffect(() => {
+  useEffect((params) => {
     const fetchParams = async () => {
       const unwrappedParams = await params;
       console.log("Interview ID:", unwrappedParams.interviewId);
@@ -136,7 +137,7 @@ export default function Interview({ params }) {
                     <VideoOff size={20} className="text-gray-400" />
                   </div>
                 </div>
-                <p className="text-center">Amma</p>
+                <p className="text-center">Amika</p>
               </div>
             )}
           </div>
@@ -151,7 +152,7 @@ export default function Interview({ params }) {
 
       {/* Footer */}
       <footer className="flex justify-between items-center p-4 border-t border-gray-800">
-        <div className="text-lg font-mono">24:36</div>
+        <div className="text-lg font-mono"></div>
         {/* <Button
           variant="outline"
           size="icon"
